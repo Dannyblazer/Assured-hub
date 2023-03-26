@@ -1,0 +1,67 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<style type="text/css">
+    .card{
+        max-width: 700px;
+    }
+    .container{
+        padding: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+
+        <!-- Blog Post -->
+        <div class="card m-auto">
+        <img class="card-img-top" src="{{ blog_post.image.url }}" alt="Blog image Unavailable">
+        <div class="card-body my-2">
+            <h2 class="card-title">{{ blog_post.title }}</h2>
+                <p class="card-text">{{ blog_post.body|safe}}</p>
+                    <p class="small">Like(s): {{ blog_post.likes.count }}</p>
+                        {% if blog_post.author == request.user %}
+                            <a href="{% url 'blog:edit' blog_post.slug %}" class="btn btn-primary">Update</a>
+                        {% endif %}
+                        {% if request.user.is_authenticated %}
+                            {% if request.user in blog_post.likes.all %}
+                                <a href="{% url 'blog:dislike' blog_post.id %}" class="btn btn-success btn-sm">Liked</a>
+                            {% else %}
+                            <button class="btn btn-sm" id="like-button" data-post-id="{{ blog_post.id }}">Like</button>
+                            {% endif %}
+                        {% else %}
+                        <p><a href="{% url 'users:registration_view' %}">Log in</a> to like or comment</p>
+                    {% endif %}
+            <p class="strong">Comments: </p>
+                {% if not blog_post %}
+                    <p>No Comment. . . . .  <a href="{% url 'blog:create_comment' blog_post.slug %}">Add one</a></p>
+                {% else %}
+                    {% for coms in blog_comments%}
+                        <p><strong>By {{ coms.author.username }} On {{ coms.created_at}}</strong></p>
+                        <p>{{ coms.body }}</p>
+                    {% if coms.author == request.user %} <p><a href="{% url 'blog:delete_comment' blog_post.slug %}">Delete</a></p> {% endif %}
+                {% endfor %}
+                <p><a href="{% url 'blog:create_comment' blog_post.slug %}" class="btn btn-primary">Comment</a></p>
+            {%endif%}
+        </div>
+        <br>
+        <div class="card-footer text-muted">
+            Updated on {{ blog_post.date_updated }} by {{ blog_post.author }}
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const likeButton = document.getElementById("like-button");
+    likeButton.addEventListener("click", () => {
+        const postId = likeButton.getAttribute("data-post-id");
+        fetch(`/blog/like/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                likeButton.innerHTML = `Like ${data.likes}`;
+            });
+    });
+</script>
+
+{% endblock content %}

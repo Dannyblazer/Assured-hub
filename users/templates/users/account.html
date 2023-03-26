@@ -1,0 +1,143 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+
+<style type="text/css" >
+      
+
+  .form-signin {
+    max-width: 330px;
+    padding: 15px;
+  }
+
+  .form-signin .form-floating:focus-within {
+    z-index: 2;
+  }
+
+  .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .h3{
+        text-align: center;
+    }
+
+  .form-signin input[type="text"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .blog-posts{
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+  }
+
+  table{
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100;
+  }
+
+  td, th{
+    background-color: #dddddd
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even){
+    background-color: #dddddd
+  }
+
+  </style>
+
+  <main class="form-signin w-100 m-auto">
+    {% if success_message %}
+      <h3 style="color:green; text-align: center;">{{success_message}}</h3>
+    {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Update Account</h1>
+
+    <div class="form-floating">
+      <input type="email" name="email" class="form-control" id="floatingInput" value={{request.user.email}}>
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+      <input type="text" name="username" class="form-control" id="floatingUsername" value={{request.user.username}}>
+      <label for="floatingUsername">Username</label>
+    </div>
+      {% for field in account_form %}
+        <p>
+          {% for error in field.errors %}
+              <p style="color: red;">{{error}}</p>
+          {% endfor %}
+        </p>
+      {% endfor %}
+      {% if account_form.non_field_errors %}
+        <p style="color: red;">{{account_form.non_field_errors}}</p>
+      {% endif %}
+
+      <button class="w-100 btn btn-lg btn-primary" type="submit">Save</button>
+    </form>
+    <br>
+    <div class="d-flex flex-column">
+      <a class="m-auto" href="{% url 'password_change' %}">Change Password</a>
+    </div>
+
+  </main>
+  {% if server_list %}
+
+  <h2>Server Table</h2>
+  <table>
+    <tr>
+      <th>Ip Address</th>
+      <th>Port Number</th>
+    </tr>
+    {% for listz in server_list %}
+    <tr>
+      <td><a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'users:server_update_view' listz.id%}">{{listz.ip}}</a></td>
+      <td><a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'users:server_update_view' listz.id%}">{{listz.port}}</a></td>
+      <td><a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'users:server_delete' listz.id%}">Delete</a></td>
+      <td><a class="me-3 py-2 text-dark text-decoration-none" href="http://{{listz.ip}}:{{listz.port}}" target="_blank">Connect</a></td>
+    </tr>
+    {%endfor%}
+  </table>
+  <br>
+  <p><a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'users:server_registration' %}">Add Server</a></p>
+  {% else %}
+
+  <div class="jumbotron">
+    <h1 class="display-4">Server Adminsitration<h1>
+      <p class="lead">Blaze Hub provides a platform for you to easily access and monitor your servers as a sysadmin while keeping up with tech news/blog.</p>
+        <hr class="my-4">
+      <p>We utilize cockpit's web interface for smooth monitoring and adminsitration of your web servers.</p>
+        <p class="lead">
+      <a class="btn btn-primary btn-lg" href="{% url 'users:server_registration' %}" role="button">Join now</a>
+      </p>
+  </div>
+
+  {% endif %}
+
+  <div class="container mt-4 p-4">
+    <div class="row">
+      <div class="blog-posts">
+        <h3 class="mb-3 font-weight-normal">Blog posts:</h3>
+        {% if blog_posts %}
+        <ul>
+          {% for post in blog_posts %}
+            <a href="{% url 'blog:detail' post.slug %}" style="text-decoration: none;" >
+              <li class="list-group-items">{{ post }}</li>
+            </a>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>You have no blog posts. Create a post <a href="{% url 'blog:create' %}">here</a>.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+{% endblock content %}
