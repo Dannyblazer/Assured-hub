@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from users.models import Account
+from django.contrib.auth.decorators import login_required
 from blog.forms import CreateBlogPostForm, UpdateBlogPostForm, CommentForm
 from blog.models import BlogPost, Comment
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -104,10 +105,9 @@ def create_comment(request, slug):
 	context['form'] = form
 	return render(request, 'blog/create_comment.html', context)
 
-def delete_comment(request, slug):
-    if not request.user.is_authenticated:
-        return redirect('users:must_authenticate')
-    blog_post = get_object_or_404(BlogPost, slug=slug)
+@login_required
+def delete_comment(request, blog_id):
+    blog_post = get_object_or_404(BlogPost, pk=blog_id)
     comment = get_object_or_404(Comment, author=request.user, blogpost=blog_post)
     comment.delete()
-    return HttpResponseRedirect(reverse('blog:detail', args=(blog_post.slug,)))
+    return redirect('blog:detail', slug=blog_post.slug)
