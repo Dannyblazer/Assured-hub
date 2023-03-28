@@ -1,6 +1,5 @@
 apturl==0.5.2
 asgiref==3.6.0
-async-timeout==4.0.2
 attrs==22.2.0
 autobahn==23.1.2
 Automat==22.10.0
@@ -9,8 +8,6 @@ blinker==1.4
 Brlapi==0.8.3
 certifi==2020.6.20
 cffi==1.15.1
-channels==4.0.0
-channels-redis==4.0.0
 chardet==4.0.0
 chutil==0.1.4
 click==8.0.3
@@ -63,8 +60,6 @@ monotonic==1.6
 more-itertools==8.10.0
 msgpack==1.0.5
 netifaces==0.11.0
-nodejs==0.1.1
-npm==0.1.1
 numpy==1.23.4
 oauthlib==3.2.0
 olefile==0.46
