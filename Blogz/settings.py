@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from django.utils import timezone
 from pathlib import Path
-import zoneinfo
+from zoneinfo import ZoneInfo
 import os
 import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -134,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-zoneinfo.available_timezones()
+ZoneInfo.available_timezones()
 
 TIME_ZONE = 'Africa/Lagos'
 
