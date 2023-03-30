@@ -19,7 +19,7 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from Blogz.settings import *
 from personal.views import home_view, news_articles
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -46,5 +46,6 @@ urlpatterns = [
      name='password_reset_complete'),
 ]
 
-urlpatterns += staticfiles_urlpatterns(STATIC_URL)
-urlpatterns += staticfiles_urlpatterns(MEDIA_URL)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
