@@ -46,5 +46,5 @@ urlpatterns = [
      name='password_reset_complete'),
 ]
 
-urlpatterns += staticfiles_urlpatterns(STATIC_URL)
-urlpatterns += staticfiles_urlpatterns(MEDIA_URL)
+urlpatterns += static(settings.STATIC_URL)
+urlpatterns += static(settings.MEDIA_URL)
