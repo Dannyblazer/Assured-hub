@@ -9,6 +9,7 @@ from django.urls import reverse
 from blog.models import BlogPost
 # Create your views here.
 
+# Default landing page for sign-ins/sign-ups.
 def index(request):
     all_users = Account.objects.all()
     template = loader.get_template('users/home.html')
