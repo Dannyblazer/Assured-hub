@@ -1,2 +1,2 @@
 # Assured-hub
-# Now live at https://assured-hub.onrender.com/
+# Now live at https://blaxe.pythonanywhere.com/
